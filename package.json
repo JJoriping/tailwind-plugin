@@ -1,0 +1,37 @@
+{
+  "type": "module",
+  "name": "@daldalso/tailwind-plugin",
+  "version": "0.8.0",
+  "description": "Daldalso-style Tailwind plugin",
+  "repository": {
+    "url": "git+https://github.com/JJoriping/tailwind-plugin.git"
+  },
+  "author": "JJoriping",
+  "license": "MIT",
+  "scripts": {
+    "watch": "tsc -w",
+    "build": "tsc"
+  },
+  "files": [
+    "/LICENSE",
+    "/README.md",
+    "/dist/"
+  ],
+  "exports": {
+    ".": {
+      "default": "./dist/index.js"
+    }
+  },
+  "devDependencies": {
+    "@daldalso/eslint-plugin": "^1.2.3",
+    "@types/node": "^22.4.2",
+    "@types/react": "^18.3.3",
+    "eslint": "^9.9.0",
+    "typescript": "^5.5.4"
+  },
+  "packageManager": "yarn@4.4.0",
+  "dependencies": {
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10"
+  }
+}
