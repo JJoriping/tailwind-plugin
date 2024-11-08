@@ -1,5 +1,5 @@
-import type { PluginCreator } from "tailwindcss/types/config.js";
 import postcss from "postcss";
+import type { PluginCreator } from "tailwindcss/types/config.js";
 
 export const animationDurationSymbol = Symbol("Animation duration");
 export const animationTimingFunctionSymbol = Symbol("Animation timing function");
@@ -13,7 +13,7 @@ type InternalPluginAPIExtra = {
 };
 // eslint-disable-next-line no-underscore-dangle
 const _walkRules = postcss.Root.prototype.walkRules;
-const animationSelectorPattern = /^(.+)\[animation="(.+?)"]$/;
+const animationSelectorPattern = /^(.+)\[animation="(.+?)"](.*)$/;
 
 const daldalsoTailwindPlugin:PluginCreator = api => {
   // Shadow
@@ -117,28 +117,32 @@ const daldalsoTailwindPlugin:PluginCreator = api => {
   const keyframes:Record<string, postcss.Rule> = {};
   api.matchVariant("kf", (chunk, { container }:InternalPluginAPIExtra) => {
     const [ animationName, keyframeName ] = chunk.split(':');
-    const isNew = !(chunk in keyframes);
+    if(!keyframeName){
+      return `&[animation="${chunk}"]`;
+    }
+    const isNewAnimation = !(animationName in animations);
+    const isNewKeyframe = !(chunk in keyframes);
     const animation = animations[animationName] ||= postcss.atRule({ name: "keyframes", params: animationName });
     const keyframe = keyframes[chunk] ||= postcss.rule({ selector: keyframeName });
 
     container?.walkDecls(decl => {
       keyframe.append(decl);
     });
-    if(isNew) animation.append(keyframe);
-
+    if(isNewKeyframe) animation.append(keyframe);
+    if(!isNewAnimation) return [];
     return `&[animation="${chunk}"]`;
   });
   postcss.Root.prototype.walkRules = function(this:postcss.Root, callback){
     const R = _walkRules.apply(this, arguments as any);
 
     if(typeof callback === "function" && callback.toString().includes("inKeyframes") && this.first?.type === "rule"){
-      const chunk = this.first.selector.match(animationSelectorPattern);
-      const keyframe = chunk && keyframes[chunk[2]];
+      const [ , prefix, value, suffix ] = this.first.selector.match(animationSelectorPattern) || [];
+      const keyframe = value && keyframes[value];
 
       if(keyframe){
         const subroot = postcss.root();
 
-        subroot.append(`${chunk[1]}{ animation-name: ${chunk[2].split(':')[0]}; }`);
+        subroot.append(`${prefix + suffix}{ animation-name: ${value.split(':')[0]}; }`);
         subroot.append(keyframe.parent);
         Object.assign(this.first, {
           type: 'root',
