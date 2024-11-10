@@ -81,6 +81,21 @@ const daldalsoTailwindPlugin:PluginCreator = api => {
   );
 
   // Animation (static)
+  api.addUtilities({
+    '.animate-fill-none': { 'animation-fill-mode': "none" },
+    '.animate-fill-forwards': { 'animation-fill-mode': "forwards" },
+    '.animate-fill-backwards': { 'animation-fill-mode': "backwards" },
+    '.animate-fill-both': { 'animation-fill-mode': "both" },
+    '.animate-infinite': { 'animation-iteration-count': "infinite" }
+  });
+  api.matchUtilities(
+    {
+      'animate-timing': value => ({
+        animationTimingFunction: value
+      })
+    },
+    { type: "any", values: api.theme("transitionTimingFunction") }
+  );
   api.matchUtilities(
     {
       'animate-delay': value => ({
@@ -115,6 +130,7 @@ const daldalsoTailwindPlugin:PluginCreator = api => {
   // Animation (dynamic)
   const animations:Record<string, postcss.AtRule> = {};
   const keyframes:Record<string, postcss.Rule> = {};
+
   api.matchVariant("kf", (chunk, { container }:InternalPluginAPIExtra) => {
     const [ animationName, keyframeName ] = chunk.split(':');
     if(!keyframeName){
@@ -141,8 +157,9 @@ const daldalsoTailwindPlugin:PluginCreator = api => {
 
       if(keyframe){
         const subroot = postcss.root();
+        const animationName = value.split(':')[0];
 
-        subroot.append(`${prefix + suffix}{ animation-name: ${value.split(':')[0]}; }`);
+        subroot.append(`${prefix + suffix}{ animation-name: ${animationName}; }`);
         subroot.append(keyframe.parent);
         Object.assign(this.first, {
           type: 'root',

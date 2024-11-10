@@ -60,7 +60,7 @@ __metadata:
 
 "@daldalso/tailwind-base@file:../tailwind-base::locator=%40daldalso%2Ftailwind-plugin%40workspace%3A.":
   version: 0.9.2
-  resolution: "@daldalso/tailwind-base@file:../tailwind-base#../tailwind-base::hash=6cb346&locator=%40daldalso%2Ftailwind-plugin%40workspace%3A."
+  resolution: "@daldalso/tailwind-base@file:../tailwind-base#../tailwind-base::hash=ff3490&locator=%40daldalso%2Ftailwind-plugin%40workspace%3A."
   dependencies:
     "@daldalso/logger": "npm:^0.9.3-0"
     tailwindcss: "npm:^3.4.10"
@@ -68,7 +68,7 @@ __metadata:
     react: ^18
   bin:
     tailwind-base: ./dist/bin.js
-  checksum: 10c0/d657e1efd31f42290785d7fef48ee5ca9aff7c62c177b911502b1b608d2fbd2d9cc486678ab99165bc49e589d2ba5e0b20ced4bbc07b1ffea8382f11a4b2339c
+  checksum: 10c0/ca45b68c307b66b99f35d2f72615ee098911faf83962c32fc30cb60f765a5cf8b3513d5b90f2630ae913aa6285ec7bca00131ca473d12fe275130b3280418ec5
   languageName: node
   linkType: hard
 
